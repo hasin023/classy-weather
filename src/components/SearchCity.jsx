@@ -23,6 +23,10 @@ class SearchCity extends React.Component {
     }
 
     fetchWeather = async () => {
+        if (this.state.city.length < 2) {
+            return this.setState({ weather: {} });
+        }
+
         try {
             this.setState({ isLoading: true });
 
@@ -52,6 +56,24 @@ class SearchCity extends React.Component {
         }
     }
 
+    componentDidMount() {
+        const city = localStorage.getItem("city");
+        if (city) {
+            this.setState({ city });
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.city !== this.state.city) {
+            this.fetchWeather();
+            localStorage.setItem("city", this.state.city);
+        }
+    }
+
+    componentWillUnmount() {
+        console.log("Unmounted")
+    }
+
     render() {
         return (
             <div className="flex flex-col items-center gap-16 w-[112rem] border-solid border-2 border-[#222] outline outline-[#222] outline-2 outline-offset-[1.2rem] py-24">
@@ -61,10 +83,10 @@ class SearchCity extends React.Component {
                         onChange={this.handleOnChange}
                         type="text" placeholder="Search from Location" value={this.state.city} />
                 </div>
-                <button onClick={this.fetchWeather}
+                {/* <button onClick={this.fetchWeather}
                     className="px-4 py-2 font-medium bg-red-400 drop-shadow-lg hover:bg-red-500 active:drop-shadow-none">
                     Search
-                </button>
+                </button> */}
 
                 {this.state.isLoading && <p className="font-bold text-[2.4rem]">Loading...</p>}
                 {this.state.weather.weathercode && <Weather weather={this.state.weather} city={this.state.displayLocation} />}

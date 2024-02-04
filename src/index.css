@@ -11,8 +11,3 @@
 html {
   @apply text-[62.5%];
 }
-
-.day.important {
-  background-color: #ecc5c0;
-  outline: 2px solid #222;
-}
